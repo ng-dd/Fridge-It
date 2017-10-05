@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 require('dotenv').config();
 
-const sequelize = new Sequelize(process.env.DB_URL);
+const sequelize = new Sequelize('postgres://nlnscmak:EBCvGRBezMg_5Kp-JJoVGg-4NCLM3ftR@pellefant.db.elephantsql.com:5432/nlnscmak', {dialect: 'postgres'});
 
 const Fridge = sequelize.define('fridge', {
   users: {
@@ -29,6 +29,15 @@ const FridgeItems = sequelize.define('fridgeItem', {
     type: Sequelize.STRING,
     allowNull: false,
   },
+  protein: {
+    type: Sequelize.STRING
+  },
+  fat: {
+    type: Sequelize.STRING
+  },
+  carbs: {
+    type: Sequelize.STRING
+  }
 });
 
 const MessageInfo = sequelize.define('messageInfo', {

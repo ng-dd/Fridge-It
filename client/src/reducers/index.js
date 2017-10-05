@@ -6,6 +6,7 @@ import search from './searchReducers';
 import fridge from './fridgeReducers';
 import items from './itemReducers';
 import auth from './authReducers';
+import graph from './graphReducers';
 
 const FridgeApp = combineReducers({
   auth,
@@ -13,6 +14,7 @@ const FridgeApp = combineReducers({
   search,
   fridge,
   items,
+  graph,
   routing: routerReducer,
 });
 

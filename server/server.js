@@ -30,7 +30,7 @@ app.get('*', (req, res) => {
 db.fridge.sync()
   .then(() => {
     db.messageInfo.sync();
-    db.fridgeItems.sync()
+    db.fridgeItems.sync({force: true})
       .then(() => {
         app.listen(port, () => {
           console.log('Listening on Port: ', port);

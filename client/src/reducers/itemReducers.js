@@ -8,6 +8,7 @@ const initialState = {
   updated: false,
   deleting: false,
   deleted: false,
+  clicked: false,
   error: null
 }
 
@@ -15,6 +16,10 @@ const initialState = {
 
 const itemReducer = (state=initialState, action) => {
   switch(action.type) {
+
+    case 'BUTTON_CLICKED': {
+      return Object.assign({}, state, {clicked: true});
+    }
 
     case 'FETCH_ITEMS_PENDING': {
       return Object.assign({}, state, {fetching: true});
