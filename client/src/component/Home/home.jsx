@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Form, Grid, Button } from 'semantic-ui-react';
 
+import VideoChat from '../Video_Chat/vidChat.jsx'
 import Messages from '../Message/messagesListView.jsx';
 import Search from '../Search/searchListView.jsx';
 import Fridge from '../Fridge/fridgeView.jsx';
@@ -34,6 +35,7 @@ class Home extends Component {
             </Grid.Row>
           </Grid.Column>
           <Grid.Column width={5}>
+            <VideoChat />
             <Messages />
           </Grid.Column>
         </Grid.Row>
