@@ -40,6 +40,9 @@ const FridgeItems = sequelize.define('fridgeItem', {
   },
   calories: {
     type: Sequelize.INTEGER
+  },
+  totalWeight: {
+    type: Sequelize.INTEGER
   }
 });
 

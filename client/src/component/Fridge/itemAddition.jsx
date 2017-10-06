@@ -30,6 +30,7 @@ class itemAddition extends Component {
 
       itemActions.getMacros(item.name)
       setTimeout(() => {
+        //one serving of the food
         itemActions.getRealMacros(this.props.macroItems.measures[0].uri, this.props.macroItems.food.uri)
       }, 1000);
       setTimeout(() => {
@@ -39,6 +40,7 @@ class itemAddition extends Component {
           item.carbs = this.props.nutrients.totalNutrients.CHOCDF.quantity;
         }
         item.calories = this.props.nutrients.calories;
+        item.totalWeight = this.props.nutrients.totalWeight;
         itemActions.addItem(item, fridge.id)
       }, 2000)
       name.value = '';

@@ -26,7 +26,8 @@ module.exports = {
       protein: req.body.protein,
       carbs: req.body.carbs,
       fat: req.body.fat,
-      calories: req.body.calories
+      calories: req.body.calories,
+      totalWeight: req.body.totalWeight
     })
     .then((data) => {
       res.send(data)

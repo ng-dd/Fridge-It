@@ -57,7 +57,8 @@ export function addItem(item, id) {
       protein: item.protein,
       fat: item.fat,
       carbs: item.carbs,
-      calories: item.calories
+      calories: item.calories,
+      totalWeight: item.totalWeight
     })
       .then(({ data }) => {
         dispatch({type: 'POST_ITEM_FULFILLED', payload: data});
