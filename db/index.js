@@ -37,6 +37,9 @@ const FridgeItems = sequelize.define('fridgeItem', {
   },
   carbs: {
     type: Sequelize.INTEGER
+  },
+  calories: {
+    type: Sequelize.INTEGER
   }
 });
 

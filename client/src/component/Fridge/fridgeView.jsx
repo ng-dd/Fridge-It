@@ -75,7 +75,7 @@ class Fridge extends Component {
   
   //get correct fridge from database
   componentDidMount() {
-    this.props.itemActions.getMacros('chicken');
+    // this.props.itemActions.getMacros('chicken');
     this.props.fridgeActions.getFridge(localStorage.getItem('visitorId') || localStorage.getItem('name'));
     let state = this;
     setTimeout(() => {
@@ -93,7 +93,7 @@ class Fridge extends Component {
   };
 
   renderLabel(props) {
-        return <text x={props.x} y={props.y}>{props.name}</text>;
+        return <text x={props.x} y={props.y}>{props.name}{' '}{props.calories + ' Calories'}</text>;
   }
   
   render() {
@@ -167,6 +167,18 @@ class Fridge extends Component {
             </Form.Group>
           </Form>
          <ItemAddition />
+         <BarChart width={600} height={300} data={this.props.items}
+            margin={{top: 20, right: 30, left: 20, bottom: 5}}>
+       <XAxis dataKey="name"/>
+       <YAxis/>
+       <CartesianGrid strokeDasharray="3 3"/>
+       <Tooltip/>
+       <Legend />
+       <Bar dataKey="protein" stackId="a" fill="#8884d8" />
+       <Bar dataKey="fat" stackId="a" fill="#82ca9d" />
+       <Bar dataKey="carbs" fill="#ffc658"/>
+      </BarChart>
+
         <BarChart width={730} height={250} data={this.props.items}>
             <XAxis dataKey="type" />
             <YAxis dataKey="quantity"/>
@@ -184,7 +196,7 @@ class Fridge extends Component {
           label={this.renderLabel}
           outerRadius={120} 
           fill="#8884d8"
-          dataKey="quantity"
+          dataKey="calories"
         >
         	{
           	this.props.items.map((entry, index) => <Cell fill={COLORS[index % COLORS.length]}/>)
@@ -195,7 +207,7 @@ class Fridge extends Component {
         width={400}
         height={200}
         data={this.props.items}
-        dataKey="quantity"
+        dataKey="protein"
         ratio={4/3}
         stroke="#fff"
         fill="#8884d8"

@@ -22,7 +22,11 @@ module.exports = {
       quantity: req.body.quantity,
       type: req.body.type,
       fridgeId: req.body.fridgeId,
-      user: req.body.user
+      user: req.body.user,
+      protein: req.body.protein,
+      carbs: req.body.carbs,
+      fat: req.body.fat,
+      calories: req.body.calories
     })
     .then((data) => {
       res.send(data)
@@ -79,8 +83,8 @@ module.exports = {
       "ingredients": [
         {
           "quantity": 1,
-          "measureURI": "http://www.edamam.com/ontologies/edamam.owl#Measure_unit",
-          "foodURI": "http://www.edamam.com/ontologies/edamam.owl#Food_11529"
+          "measureURI": req.body.measureURI,
+          "foodURI": req.body.foodURI
         }
       ]
     })

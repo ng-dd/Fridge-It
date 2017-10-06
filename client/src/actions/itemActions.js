@@ -30,9 +30,12 @@ export function getMacros(item) {
   }
 };
 
-export function getRealMacros(item) {
+export function getRealMacros(measureURI, foodURI) {
   return function(dispatch) {
-    axios.post('/api/nutrients')
+    axios.post('/api/nutrients', {
+      measureURI: measureURI,
+      foodURI: foodURI
+    })
     .then((data) => {
       console.log('this is the real macro nutrients', data.data)
       dispatch({type: 'NUTRIENTS_INCOMING', payload: data.data})
@@ -51,6 +54,10 @@ export function addItem(item, id) {
       type: item.type,
       user: item.user,
       fridgeId: id,
+      protein: item.protein,
+      fat: item.fat,
+      carbs: item.carbs,
+      calories: item.calories
     })
       .then(({ data }) => {
         dispatch({type: 'POST_ITEM_FULFILLED', payload: data});
