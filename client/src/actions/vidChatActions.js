@@ -12,3 +12,9 @@ export const idGen = () => {
     dispatch({type: 'RECIEVE_ID'})
   }
 }
+
+export const connectVideo = (secondaryId) => {
+  return function(dispatch){
+    dispatch({type: 'VIDEO_CONNECTION', payload: secondaryId})
+  }
+}
