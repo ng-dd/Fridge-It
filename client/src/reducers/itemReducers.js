@@ -9,13 +9,19 @@ const initialState = {
   deleting: false,
   deleted: false,
   clicked: false,
-  error: null
+  error: null,
+  macroItems: []
 }
 
 //reducer to change state for each action
 
 const itemReducer = (state=initialState, action) => {
   switch(action.type) {
+    case 'ITEM_ID_INCOMING': {
+      return Object.assign({}, state, {
+        macroItems: action.payload
+      });
+    }
 
     case 'BUTTON_CLICKED': {
       return Object.assign({}, state, {clicked: true});

@@ -75,8 +75,7 @@ class Fridge extends Component {
   
   //get correct fridge from database
   componentDidMount() {
-    console.log(this.props.getFridge, 'hhhhhhhhhhhhhhhhh')
-    // this.props.graphActions.toggleGraph();
+    this.props.itemActions.getMacros();
     this.props.fridgeActions.getFridge(localStorage.getItem('visitorId') || localStorage.getItem('name'));
     let state = this;
     setTimeout(() => {
@@ -164,6 +163,7 @@ class Fridge extends Component {
                   } else {
                     this.setState({clicked: true})
                   }
+                  itemActions.getMacros('chicken')
                   console.log(this.state.clicked)
                   {/* graphActions.toggleGraph(); */}
                 }}
