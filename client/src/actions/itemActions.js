@@ -31,7 +31,9 @@ export function getItems(fridgeId) {
 // var url = 'https://api.edamam.com/api/food-database/parser?ingr=steak&app_id=1fd96143&app_key=278fd5e87671519afa3b8cacb5a05268'
 export function getMacros(item) {
   return function(dispatch) {
-    axios.post('/api/macros')
+    axios.post('/api/macros', {
+      item: item
+    })
     .then((data) => {
       console.log('this is the data from getMacros', data)
       dispatch({type: 'ITEM_ID_INCOMING', payload: data.data.hints[0]});

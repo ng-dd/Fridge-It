@@ -62,11 +62,30 @@ module.exports = {
   },
 
   getMacros: (req, res) => {
-    console.log('hellooo')
-    axios.get('https://api.edamam.com/api/food-database/parser?ingr=chicken&app_id=1fd96143&app_key=278fd5e87671519afa3b8cacb5a05268')
+    console.log(req.body)
+    axios.get(`https://api.edamam.com/api/food-database/parser?ingr=${req.body.item}&app_id=1fd96143&app_key=278fd5e87671519afa3b8cacb5a05268`)
     .then((data) => {
-      console.log(data.data)
+      console.log(req.body, 'fuuuuuuuuuuuck')
       res.send(data.data).status(200)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  },
+
+  getRealMacros: (req, res) => {
+    axios.post('https://api.edamam.com/api/food-database/nutrients?app_id=1fd96143&app_key=278fd5e87671519afa3b8cacb5a05268', {
+      "yield": 1,
+      "ingredients": [
+        {
+          "quantity": 1,
+          "measureURI": "http://www.edamam.com/ontologies/edamam.owl#Measure_unit",
+          "foodURI": "http://www.edamam.com/ontologies/edamam.owl#Food_11529"
+        }
+      ]
+    })
+    .then((data) => {
+      res.send(data.data).send(200)
     })
     .catch((err) => {
       console.log(err)

@@ -75,7 +75,7 @@ class Fridge extends Component {
   
   //get correct fridge from database
   componentDidMount() {
-    this.props.itemActions.getMacros();
+    this.props.itemActions.getMacros('chicken');
     this.props.fridgeActions.getFridge(localStorage.getItem('visitorId') || localStorage.getItem('name'));
     let state = this;
     setTimeout(() => {
@@ -232,10 +232,9 @@ class Fridge extends Component {
               <Form.Button content={'Switch to Graph View'} 
                 onClick={(e) => {
                   e.preventDefault();
-                  {/* itemActions.toggleClick(); */}
                   this.setState({clicked: true})
                   console.log(this.state.clicked)
-                  {/* graphActions.toggleGraph(); */}
+                  console.log(this.props, 'propsss')
                 }}
               />
             </Form.Group>
@@ -270,7 +269,8 @@ const fridgeState = (store) => {
     fridge: store.fridge.fridge,
     items: store.items.items,
     posted: store.fridge.posted,
-    fetched: store.fridge.fetched
+    fetched: store.fridge.fetched,
+    macroItems: store.items.macroItems
   }
 };
 
