@@ -10,7 +10,8 @@ const initialState = {
   deleted: false,
   clicked: false,
   error: null,
-  macroItems: []
+  macroItems: [],
+  nutrients: []
 }
 
 //reducer to change state for each action
@@ -23,8 +24,10 @@ const itemReducer = (state=initialState, action) => {
       });
     }
 
-    case 'BUTTON_CLICKED': {
-      return Object.assign({}, state, {clicked: true});
+    case'NUTRIENTS_INCOMING': {
+      return Object.assign({}, state, {
+        nutrients: action.payload
+      })
     }
 
     case 'FETCH_ITEMS_PENDING': {

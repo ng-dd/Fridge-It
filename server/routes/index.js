@@ -20,7 +20,10 @@ router.get('/items/:fridgeId', item.getAllItems);
 router.post('/items', item.addItem);
 router.patch('/items/:id', item.updateItem);
 router.delete('/items/:id', item.deleteItem);
+
+//macros shiiiit
 router.post('/macros', item.getMacros);
+router.post('/nutrients', item.getRealMacros);
 
 // Search Routes
 router.route('/search')

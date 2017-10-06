@@ -157,15 +157,11 @@ class Fridge extends Component {
               <Form.Button content={'Switch to Graph View'} 
                 onClick={(e) => {
                   e.preventDefault();
-                  {/* itemActions.toggleClick(); */}
                   if (this.state.clicked === true) {
                     this.setState({clicked: false})
                   } else {
                     this.setState({clicked: true})
                   }
-                  itemActions.getMacros('chicken')
-                  console.log(this.state.clicked)
-                  {/* graphActions.toggleGraph(); */}
                 }}
               />
             </Form.Group>
@@ -234,7 +230,8 @@ class Fridge extends Component {
                   e.preventDefault();
                   this.setState({clicked: true})
                   console.log(this.state.clicked)
-                  console.log(this.props, 'propsss')
+                  itemActions.getRealMacros();
+                  console.log(this.props, 'prrroooopppps')
                 }}
               />
             </Form.Group>
@@ -270,7 +267,8 @@ const fridgeState = (store) => {
     items: store.items.items,
     posted: store.fridge.posted,
     fetched: store.fridge.fetched,
-    macroItems: store.items.macroItems
+    macroItems: store.items.macroItems,
+    nutrients: store.items.nutrients
   }
 };
 

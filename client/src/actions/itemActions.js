@@ -3,19 +3,6 @@ import axios from 'axios';
 //functions to get items and add items on front end 
 //uses reducers as part of promises to change state
 
-export function toggleClick() {
-  console.log('hllo')
-  return function(dispatch) {
-  axios.get('/api/items/')
-    .then(({ data }) => {
-      dispatch({type: 'BUTTON_CLICKED', payload: data});
-    })
-    .catch(err => { 
-      dispatch({type: 'BUTTON_NOT_CLICKED', payload: err});
-    });
-  };
-};
-
 export function getItems(fridgeId) {
   return function(dispatch) {
     axios.get('/api/items/' + fridgeId)
@@ -28,7 +15,6 @@ export function getItems(fridgeId) {
   };
 };
 
-// var url = 'https://api.edamam.com/api/food-database/parser?ingr=steak&app_id=1fd96143&app_key=278fd5e87671519afa3b8cacb5a05268'
 export function getMacros(item) {
   return function(dispatch) {
     axios.post('/api/macros', {
@@ -40,6 +26,19 @@ export function getMacros(item) {
     })
     .catch((err) => {
       console.log(err)
+    })
+  }
+};
+
+export function getRealMacros(item) {
+  return function(dispatch) {
+    axios.post('/api/nutrients')
+    .then((data) => {
+      console.log('this is the real macro nutrients', data.data)
+      dispatch({type: 'NUTRIENTS_INCOMING', payload: data.data})
+    })
+    .catch((err) => {
+      console.log(err);
     })
   }
 }
