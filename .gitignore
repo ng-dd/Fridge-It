@@ -6,7 +6,3 @@ firebase.json
 .env
 
 client/public/bundle.js
-# Elastic Beanstalk Files
-.elasticbeanstalk/*
-!.elasticbeanstalk/*.cfg.yml
-!.elasticbeanstalk/*.global.yml

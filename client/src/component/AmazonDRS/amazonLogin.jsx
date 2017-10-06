@@ -26,6 +26,16 @@ class Amazon extends Component {
             }
           }  
         </script>
+        <script type="text/javascript">
+        {
+          document.getElementById('LoginWithAmazon').onclick = function() {
+          options = { scope : 'profile' };
+          amazon.Login.authorize(options,
+              'http://localhost:3000');
+          return false;
+          }
+              }
+        </script>
 
         <a href id="LoginWithAmazon">
         <img border="0" alt="Login with Amazon"
