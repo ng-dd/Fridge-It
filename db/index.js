@@ -30,13 +30,19 @@ const FridgeItems = sequelize.define('fridgeItem', {
     allowNull: false,
   },
   protein: {
-    type: Sequelize.STRING
+    type: Sequelize.INTEGER
   },
   fat: {
-    type: Sequelize.STRING
+    type: Sequelize.INTEGER
   },
   carbs: {
-    type: Sequelize.STRING
+    type: Sequelize.INTEGER
+  },
+  calories: {
+    type: Sequelize.INTEGER
+  },
+  totalWeight: {
+    type: Sequelize.INTEGER
   }
 });
 

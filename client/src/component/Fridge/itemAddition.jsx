@@ -19,14 +19,30 @@ class itemAddition extends Component {
     
     const handleSubmit = () => {
       const item = {};
-      
       let name = document.getElementById('inputItm');
       item.name = name.value;
       let qty = document.getElementById('inputQty');
       item.quantity = qty.value;
       item.type = type;
       item.user = username;
-      itemActions.addItem(item, fridge.id);
+      // itemActions.addItem(item, fridge.id);
+      console.log(this.props, 'handling submit!!!')
+
+      itemActions.getMacros(item.name)
+      setTimeout(() => {
+        //one serving of the food
+        itemActions.getRealMacros(this.props.macroItems.measures[0].uri, this.props.macroItems.food.uri)
+      }, 1000);
+      setTimeout(() => {
+        item.protein = this.props.nutrients.totalNutrients.PROCNT.quantity;
+        item.fat = this.props.nutrients.totalNutrients.FAT.quantity;
+        if (this.props.nutrients.totalNutrients.CHOCDF) {
+          item.carbs = this.props.nutrients.totalNutrients.CHOCDF.quantity;
+        }
+        item.calories = this.props.nutrients.calories;
+        item.totalWeight = this.props.nutrients.totalWeight;
+        itemActions.addItem(item, fridge.id)
+      }, 2000)
       name.value = '';
       qty.value = '';
       type = '';
@@ -101,7 +117,9 @@ class itemAddition extends Component {
 const fridgeState = (store) => {
   return {
     fridge: store.fridge.fridge,
-    items: store.items.items
+    items: store.items.items,
+    macroItems: store.items.macroItems,
+    nutrients: store.items.nutrients
   }
 };
 

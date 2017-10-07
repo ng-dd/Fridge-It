@@ -68,15 +68,18 @@ class Fridge extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      clicked: false
+      clicked: false,
+      macroView: false,
+      calories: false,
+      types: false,
+      fridge: true
     }
     this.filterItems = this.filterItems.bind(this);
   }
   
   //get correct fridge from database
   componentDidMount() {
-    console.log(this.props.getFridge, 'hhhhhhhhhhhhhhhhh')
-    // this.props.graphActions.toggleGraph();
+    // this.props.itemActions.getMacros('chicken');
     this.props.fridgeActions.getFridge(localStorage.getItem('visitorId') || localStorage.getItem('name'));
     let state = this;
     setTimeout(() => {
@@ -94,12 +97,19 @@ class Fridge extends Component {
   };
 
   renderLabel(props) {
-        return <text x={props.x} y={props.y}>{props.name}</text>;
+        return <text x={props.x} y={props.y}>{props.name}{' '}{props.calories + '/ LB'}</text>;
   }
   
   render() {
 
-    
+    let graphOptions = [
+      {text: 'Macro nutrient View', value: 'macro'},
+      {text: 'Calorie View', value: 'cals'},
+      {text: 'Types View', value: 'type'},
+      {text: 'Mario 3 view', value: 'mario'},
+      {text: 'Fridge View', value: 'fridge'}
+    ]
+
     let { fridge, fridgeActions, itemActions } = this.props;
     const types = [
       {
@@ -136,10 +146,10 @@ class Fridge extends Component {
     //form switches fridge views
     //render each item list by category
     //create popup to show list
-    if (this.state.clicked === true) {
+    if (this.state.macroView === true) {
       return (
         <div>
-         <Form>
+          <Form>
             <Form.Group inline>
               <Form.Input 
                 id='inputFid'
@@ -154,32 +164,84 @@ class Fridge extends Component {
                   document.getElementById('inputFid').value = '';
                 }}
               />
-
-              <Form.Button content={'Switch to Graph View'} 
-                onClick={(e) => {
-                  e.preventDefault();
-                  {/* itemActions.toggleClick(); */}
-                  if (this.state.clicked === true) {
-                    this.setState({clicked: false})
-                  } else {
-                    this.setState({clicked: true})
-                  }
-                  console.log(this.state.clicked)
-                  {/* graphActions.toggleGraph(); */}
-                }}
+              <Form.Select 
+              placeholder='Browse Graphs' 
+              options={graphOptions}
+              id="inputType"
+              onChange={(e, {value}) => {
+                if (value === 'cals') {
+                  this.setState({fridge: false, calories: true, macroView: false, types: false});
+                }
+                if (value === 'macro') {
+                  this.setState({fridge: false, calories: false, macroView: true, types: false});
+                }
+                if (value === 'type') {
+                  this.setState({fridge: false, calories: false, macroView: false, types: true});
+                }
+                if (value === 'fridge') {
+                  this.setState({fridge: true, calories: false, macroView: false, types: false});
+                }
+              }}
               />
             </Form.Group>
           </Form>
          <ItemAddition />
-        <BarChart width={730} height={250} data={this.props.items}>
-            <XAxis dataKey="type" />
-            <YAxis dataKey="quantity"/>
-            <CartesianGrid strokeDasharray="4 4" />
-            <Tooltip />
-            <Legend />
-            <Bar fill="#00C49F" dataKey="quantity"/>
-            </BarChart>
-            <PieChart width={800} height={400} onMouseEnter={this.onPieEnter}>
+         <BarChart width={600} height={300} data={this.props.items}
+            margin={{top: 20, right: 30, left: 20, bottom: 5}}>
+       <XAxis dataKey="name"/>
+       <YAxis/>
+       <CartesianGrid strokeDasharray="3 3"/>
+       <Tooltip/>
+       <Legend />
+       <Bar dataKey="protein" stackId="a" fill="#8884d8" />
+       <Bar dataKey="fat" stackId="a" fill="#82ca9d" />
+       <Bar dataKey="carbs" fill="#ffc658"/>
+      </BarChart>
+        </div>
+      )
+    }
+
+    if (this.state.calories === true) {
+      return (
+        <div>
+          <Form>
+            <Form.Group inline>
+              <Form.Input 
+                id='inputFid'
+                placeholder='Fridge ID'
+              />
+              <Form.Button content={'Switch fridge'}
+                onClick={(e) => {
+                  e.preventDefault();
+                  fridgeActions.getFridge(document.getElementById('inputFid').value);
+                  localStorage.setItem('visitorId', document.getElementById('inputFid').value);
+                  location.reload();
+                  document.getElementById('inputFid').value = '';
+                }}
+              />
+              <Form.Select 
+              placeholder='Browse Graphs' 
+              options={graphOptions}
+              id="inputType"
+              onChange={(e, {value}) => {
+                if (value === 'cals') {
+                  this.setState({fridge: false, calories: true, macroView: false, types: false});
+                }
+                if (value === 'macro') {
+                  this.setState({fridge: false, calories: false, macroView: true, types: false});
+                }
+                if (value === 'type') {
+                  this.setState({fridge: false, calories: false, macroView: false, types: true});
+                }
+                if (value === 'fridge') {
+                  this.setState({fridge: true, calories: false, macroView: false, types: false});
+                }
+              }}
+              />
+            </Form.Group>
+          </Form>
+         <ItemAddition />
+         <PieChart width={800} height={400} onMouseEnter={this.onPieEnter}>
         <Pie
           data={this.props.items} 
           cx={300} 
@@ -188,27 +250,151 @@ class Fridge extends Component {
           label={this.renderLabel}
           outerRadius={120} 
           fill="#8884d8"
-          dataKey="quantity"
+          dataKey="calories"
         >
         	{
           	this.props.items.map((entry, index) => <Cell fill={COLORS[index % COLORS.length]}/>)
           }
         </Pie>
+        <Tooltip />
       </PieChart>
-            <Treemap
-        width={400}
-        height={200}
-        data={this.props.items}
-        dataKey="quantity"
-        ratio={4/3}
-        stroke="#fff"
-        fill="#8884d8"
-        label={this.renderLabel}
-        content={<CustomizedContent colors={COLORS}/>}
-        />
-      </div>
+        </div>
       )
     }
+
+    if (this.state.types === true) {
+      return (
+        <div>
+          <Form>
+            <Form.Group inline>
+              <Form.Input 
+                id='inputFid'
+                placeholder='Fridge ID'
+              />
+              <Form.Button content={'Switch fridge'}
+                onClick={(e) => {
+                  e.preventDefault();
+                  fridgeActions.getFridge(document.getElementById('inputFid').value);
+                  localStorage.setItem('visitorId', document.getElementById('inputFid').value);
+                  location.reload();
+                  document.getElementById('inputFid').value = '';
+                }}
+              />
+              <Form.Select 
+              placeholder='Browse Graphs' 
+              options={graphOptions}
+              id="inputType"
+              onChange={(e, {value}) => {
+                if (value === 'cals') {
+                  this.setState({fridge: false, calories: true, macroView: false, types: false});
+                }
+                if (value === 'macro') {
+                  this.setState({fridge: false, calories: false, macroView: true, types: false});
+                }
+                if (value === 'type') {
+                  this.setState({fridge: false, calories: false, macroView: false, types: true});
+                }
+                if (value === 'fridge') {
+                  this.setState({fridge: true, calories: false, macroView: false, types: false});
+                }
+              }}
+              />
+            </Form.Group>
+          </Form>
+         <ItemAddition />
+         <BarChart width={730} height={250} data={this.props.items}>
+            <XAxis dataKey="type" />
+            <YAxis dataKey="quantity"/>
+            <CartesianGrid strokeDasharray="4 4" />
+            <Tooltip />
+            <Legend />
+            <Bar fill="#00C49F" dataKey="quantity"/>
+            </BarChart>
+        </div>
+      )
+    } 
+    // if (this.state.clicked === true) {
+    //   return (
+    //     <div>
+    //      <Form>
+    //         <Form.Group inline>
+    //           <Form.Input 
+    //             id='inputFid'
+    //             placeholder='Fridge ID'
+    //           />
+    //           <Form.Button content={'Switch fridge'}
+    //             onClick={(e) => {
+    //               e.preventDefault();
+    //               fridgeActions.getFridge(document.getElementById('inputFid').value);
+    //               localStorage.setItem('visitorId', document.getElementById('inputFid').value);
+    //               location.reload();
+    //               document.getElementById('inputFid').value = '';
+    //             }}
+    //           />
+
+    //           <Form.Button content={'Switch to Graph View'} 
+    //             onClick={(e) => {
+    //               e.preventDefault();
+    //               if (this.state.clicked === true) {
+    //                 this.setState({clicked: false})
+    //               } else {
+    //                 this.setState({clicked: true})
+    //               }
+    //             }}
+    //           />
+    //         </Form.Group>
+    //       </Form>
+    //      <ItemAddition />
+    //      <BarChart width={600} height={300} data={this.props.items}
+    //         margin={{top: 20, right: 30, left: 20, bottom: 5}}>
+    //    <XAxis dataKey="name"/>
+    //    <YAxis/>
+    //    <CartesianGrid strokeDasharray="3 3"/>
+    //    <Tooltip/>
+    //    <Legend />
+    //    <Bar dataKey="protein" stackId="a" fill="#8884d8" />
+    //    <Bar dataKey="fat" stackId="a" fill="#82ca9d" />
+    //    <Bar dataKey="carbs" fill="#ffc658"/>
+    //   </BarChart>
+
+    //     <BarChart width={730} height={250} data={this.props.items}>
+    //         <XAxis dataKey="type" />
+    //         <YAxis dataKey="quantity"/>
+    //         <CartesianGrid strokeDasharray="4 4" />
+    //         <Tooltip />
+    //         <Legend />
+    //         <Bar fill="#00C49F" dataKey="quantity"/>
+    //         </BarChart>
+    //         <PieChart width={800} height={400} onMouseEnter={this.onPieEnter}>
+    //     <Pie
+    //       data={this.props.items} 
+    //       cx={300} 
+    //       cy={200} 
+    //       labelLine={false}
+    //       label={this.renderLabel}
+    //       outerRadius={120} 
+    //       fill="#8884d8"
+    //       dataKey="calories"
+    //     >
+    //     	{
+    //       	this.props.items.map((entry, index) => <Cell fill={COLORS[index % COLORS.length]}/>)
+    //       }
+    //     </Pie>
+    //   </PieChart>
+    //         <Treemap
+    //     width={400}
+    //     height={200}
+    //     data={this.props.items}
+    //     dataKey="protein"
+    //     ratio={4/3}
+    //     stroke="#fff"
+    //     fill="#8884d8"
+    //     label={this.renderLabel}
+    //     content={<CustomizedContent colors={COLORS}/>}
+    //     />
+    //   </div>
+    //   )
+    // }
     return (
       <div>
         <h2 className='ui dividing header'>{fridge.name && fridge.name.split('@')[0]}'s Fridge</h2>
@@ -229,15 +415,25 @@ class Fridge extends Component {
                 }}
               />
 
-              <Form.Button content={'Switch to Graph View'} 
-                onClick={(e) => {
-                  e.preventDefault();
-                  {/* itemActions.toggleClick(); */}
-                  this.setState({clicked: true})
-                  console.log(this.state.clicked)
-                  {/* graphActions.toggleGraph(); */}
-                }}
-              />
+              <Form.Select 
+              placeholder='Browse Graphs' 
+              options={graphOptions}
+              id="inputType"
+              onChange={(e, {value}) => {
+                if (value === 'cals') {
+                  this.setState({fridge: false, calories: true, macroView: false, types: false});
+                }
+                if (value === 'macro') {
+                  this.setState({fridge: false, calories: false, macroView: true, types: false});
+                }
+                if (value === 'type') {
+                  this.setState({fridge: false, calories: false, macroView: false, types: true});
+                }
+                if (value === 'fridge') {
+                  this.setState({fridge: true, calories: false, macroView: false, types: false});
+                }
+              }}
+              />  
             </Form.Group>
           </Form>
           <ItemAddition />
@@ -270,7 +466,9 @@ const fridgeState = (store) => {
     fridge: store.fridge.fridge,
     items: store.items.items,
     posted: store.fridge.posted,
-    fetched: store.fridge.fetched
+    fetched: store.fridge.fetched,
+    macroItems: store.items.macroItems,
+    nutrients: store.items.nutrients
   }
 };
 
