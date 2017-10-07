@@ -9,6 +9,10 @@ const Fridge = sequelize.define('fridge', {
   },
   name: {
     type: Sequelize.STRING
+  },
+  vidCode: {
+    type: Sequelize.STRING,
+    allowNull: true
   }
 });
 
