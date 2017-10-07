@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 class Amazon extends Component {
   constructor(props) {
@@ -6,16 +7,21 @@ class Amazon extends Component {
     
   }
 
+  componentDidMount() {
+
+  };
+
 
   render() {
     return(
       <div>
+        <h1>hello world test amazon</h1>
         <div id="amazon-root"></div>
 
-        <script type="text/javascript">
+        {/* <script type="text/javascript">
           {
             window.onAmazonLoginReady = function() {
-              amazon.Login.setClientId('YOUR-CLIENT-ID');
+              amazon.Login.setClientId('amzn1.application-oa2-client.5241a33ed1c24797b108ae0c6fa8afdc');
             }
             (function(d) {
               var a = d.createElement('script'); a.type = 'text/javascript';
@@ -35,13 +41,8 @@ class Amazon extends Component {
           return false;
           }
               }
-        </script>
+        </script> */}
 
-        <a href id="LoginWithAmazon">
-        <img border="0" alt="Login with Amazon"
-        src="http://g-ecx.images-amazon.com/images/G/01/lwa/btnLWA_gry_156x132.png"
-        width="156" height="32" />
-        </a>
 
 
       </div>  
@@ -49,4 +50,4 @@ class Amazon extends Component {
   }
 }
 
-export default connect(null)(Amazon);
+export default connect()(Amazon);

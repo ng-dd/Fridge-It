@@ -10,7 +10,7 @@ const routes = require('./routes');
 const db = require('../db');
 
 // Express Initialization
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 443;
 const app = express();
 
 // Middlewares
