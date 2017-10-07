@@ -4,7 +4,6 @@ const initialState = {
   peer: new Peer({key: '6tanpmdb95c7syvi'}),
   connection: null,
   call: null,
-  getUserMedia : navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia,
   vidCodeUpdated: false,
   usersList: [],
 }

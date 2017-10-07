@@ -8,6 +8,7 @@ class VideoChat extends Component {
     super(props);
     this.state = {
       video: "",
+      connectedTo: null
     }
   }
 
@@ -19,8 +20,8 @@ class VideoChat extends Component {
   render() {
     // const vid = document.getElementById('video');
     // const canvas = videoCanvas
-    let { userId, peer, getUserMedia, usersList, user } = this.props;
-
+    let { userId, peer, usersList, user } = this.props;
+    const getUserMedia = navigator.getUserMedia.bind(navigator) || navigator.webkitGetUserMedia.bind(navigator) || navigator.mozGetUserMedia.bind(navigator);
     console.log('this is getusermedia in the fcomponet ', getUserMedia)
     let secondaryId = "";
     this.props.actions.updateVidCode(userId, user);
@@ -32,7 +33,6 @@ class VideoChat extends Component {
     const handleVideoClick = () => {
       // this.props.actions.connectVideo(secondaryId);
       console.log('attempting to send video call');
-      var getUserMedia = navigator.getUserMedia.bind(navigator) || navigator.webkitGetUserMedia.bind(navigator) || navigator.mozGetUserMedia.bind(navigator);
       getUserMedia({ video: true, audio: true }, (stream) => {
         var call = peer.call(secondaryId, stream);
         call.on('stream', (remoteStream) => {
@@ -48,19 +48,25 @@ class VideoChat extends Component {
 
     }
 
-    const connectTo = (userVC) => {
+    const connectTo = (command, userVC = this.connectedTo) => {
       // this.props.actions.connectVideo(secondaryId);
       console.log('attempting to send video call');
-      var getUserMedia = navigator.getUserMedia.bind(navigator) || navigator.webkitGetUserMedia.bind(navigator) || navigator.mozGetUserMedia.bind(navigator);
       getUserMedia({ video: true, audio: true }, (stream) => {
         var call = peer.call(userVC, stream);
-        call.on('stream', (remoteStream) => {
-          console.log('made it past the dragon')
-          // Show stream in some video/canvas element.
-          console.log('remote stream ' + remoteStream)
-          this.video[0].src = URL.createObjectURL(remoteStream);
-          this.video[0].play();
-        });
+        if (command === 'open'){
+          this.connectedTo = userVC; 
+          call.on('stream', (remoteStream) => {
+            console.log('made it past the dragon')
+            // Show stream in some video/canvas element.
+            console.log('remote stream ' + remoteStream)
+            this.video[0].src = URL.createObjectURL(remoteStream);
+            this.video[0].play();
+          });
+        } else if (command === 'close'){
+          this.video[0].pause();
+          this.video[0].src="";
+          // location.reload
+        }
       }, function (err) {
         console.log('Failed to get local stream', err);
       });
@@ -93,7 +99,7 @@ class VideoChat extends Component {
     const listUsers = usersList.map((user) => {
       return <li><a onClick={() => { 
         console.log('connecting to: ', user.name, ' with a vidCode of: ', user.vidCode, ', while mine is: ', userId)
-        connectTo(user.vidCode) }}> {user.name} </a></li>
+        connectTo('open', user.vidCode, ) }}> {user.name} </a></li>
     })
 
     return (
@@ -110,6 +116,10 @@ class VideoChat extends Component {
         <button onClick={() => {
           handleVideoClick();
         }}>Video Connect</button>
+        <button onClick={()=>{
+          connectTo('close');
+          
+        }}>End call</button>
         <li> {listUsers}
         </li>
       </div>
@@ -121,7 +131,6 @@ const idStore = (store) => {
   return {
     userId: store.video.peer.hasOwnProperty('id') ? store.video.peer.id : "",
     peer: store.video.peer,
-    getUserMedia: store.video.getUserMedia,
     usersList: store.video.usersList,
     user: store.fridge.fridge.name
   }
