@@ -39,8 +39,8 @@ class VideoChat extends Component {
           console.log('made it past the dragon')
           // Show stream in some video/canvas element.
           console.log('remote stream ' + remoteStream)
-          // this.video[0].src = URL.createObjectURL(remoteStream);
-          // this.video[0].play();
+          this.video[0].src = URL.createObjectURL(remoteStream);
+          this.video[0].play();
         });
       }, function(err) {
         console.log('Failed to get local stream' ,err);
