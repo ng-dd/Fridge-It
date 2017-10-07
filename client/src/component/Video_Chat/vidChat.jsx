@@ -6,22 +6,46 @@ import * as vidChatActions from '../../actions/vidChatActions'
 class VideoChat extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      video: "",
+    }
   }
 
   componentDidMount() {
-    this.props.actions.idGen();
-
+    console.log('hello')
+    this.video = document.getElementsByTagName('video');
+    console.log('video being established as ', this.video[0]);
   }
   render() {
+    // const vid = document.getElementById('video');
+    // const canvas = videoCanvas
     let { userId, peer, getUserMedia } = this.props;
+
     console.log('this is getusermedia in the fcomponet ', getUserMedia)
     let secondaryId = "";
+    
     const handleClick = () => {
       this.props.actions.connectUsers(secondaryId);
     }
 
+
     const handleVideoClick = () => {
-      this.props.actions.connectVideo(secondaryId);
+      // this.props.actions.connectVideo(secondaryId);
+      console.log('attempting to send video call');
+      var getUserMedia = navigator.getUserMedia.bind(navigator) || navigator.webkitGetUserMedia.bind(navigator) || navigator.mozGetUserMedia.bind(navigator);
+      getUserMedia({video: true, audio: true}, (stream) => {
+        var call = peer.call(secondaryId, stream);
+        call.on('stream', (remoteStream) => {
+          console.log('made it past the dragon')
+          // Show stream in some video/canvas element.
+          console.log('remote stream ' + remoteStream)
+          // this.video[0].src = URL.createObjectURL(remoteStream);
+          // this.video[0].play();
+        });
+      }, function(err) {
+        console.log('Failed to get local stream' ,err);
+});
+
     }
 
     peer.on('connection', function (conn) {
@@ -31,10 +55,15 @@ class VideoChat extends Component {
       })
     })
 
-    peer.on('call', function(call) {
-      getUserMedia({video: true, audio: true}, function(stream) {
+    peer.on('call', (call) => {
+      navigator.getUserMedia({video: true, audio: true}, (stream) => {
         call.answer(stream); // Answer the call with an A/V stream.
-        call.on('stream', function(remoteStream) {
+        call.on('stream', (remoteStream) => {
+          console.log('inside stream response')
+          console.log('looking for this video',this.video);
+          this.video[0].src = URL.createObjectURL(remoteStream);
+          // console.log('this is the vid', vid);
+          this.video[0].play();
           // Show stream in some video/canvas element.
         });
       }, function(err) {
@@ -44,7 +73,8 @@ class VideoChat extends Component {
 
     return(
       
-      <div>   
+      <div>
+        <video id='videoStream' src=""> </video>   
         <h2>{userId}</h2>
         <input onChange={(e)=>{
           secondaryId = e.target.value;
