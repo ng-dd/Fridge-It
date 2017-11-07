@@ -8,10 +8,14 @@ const initialState = {
   updated: false,
   deleting: false,
   deleted: false,
+<<<<<<< HEAD
   clicked: false,
   error: null,
   macroItems: [],
   nutrients: []
+=======
+  error: null
+>>>>>>> parent of 33979f9... adtogglied cgraph
 }
 
 //reducer to change state for each action
@@ -24,12 +28,15 @@ const itemReducer = (state=initialState, action) => {
       });
     }
 
+<<<<<<< HEAD
     case'NUTRIENTS_INCOMING': {
       return Object.assign({}, state, {
         nutrients: action.payload
       })
     }
 
+=======
+>>>>>>> parent of 33979f9... adtogglied cgraph
     case 'FETCH_ITEMS_PENDING': {
       return Object.assign({}, state, {fetching: true});
     }

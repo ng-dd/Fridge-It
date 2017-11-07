@@ -8,65 +8,12 @@ import ItemAddition from './itemAddition.jsx';
 
 import * as fridgeActions from '../../actions/fridgeActions.js';
 import * as itemActions from '../../actions/itemActions.js';
-import * as graphActions from '../../actions/graphActions.js';
 import styles from '../../../public/fridge.css';
-
-import { BarChart, Bar, CartesianGrid, XAxis, YAxis, Tooltip, Legend } from 'recharts';
-import  { PieChart, Pie, Sector, Cell } from 'recharts';
-import { Treemap } from 'recharts';
-
-const RADIAN = Math.PI / 180;
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
-
-const CustomizedContent = ({ root, depth, x, y, width, height, index, payload, colors, rank, name }) => {
-
-    return (
-      <g>
-        <rect
-          x={x}
-          y={y}
-          width={width}
-          height={height}
-          style={{
-            fill: depth < 2 ? colors[Math.floor(index / root.children.length * 6)] : 'none',
-            stroke: '#fff',
-            strokeWidth: 2 / (depth + 1e-10),
-            strokeOpacity: 1 / (depth + 1e-10),
-          }}
-        />
-        {
-          depth === 1 ?
-          <text
-            x={x + width / 2}
-            y={y + height / 2 + 7}
-            textAnchor="middle"
-            fill="#fff"
-            fontSize={14}
-          >
-            {name}
-          </text>
-          : null
-        }
-        {
-          depth === 1 ?
-          <text
-            x={x + 4}
-            y={y + 18}
-            fill="#fff"
-            fontSize={16}
-            fillOpacity={0.9}
-          >
-            {index + 1}
-          </text>
-          : null
-        }
-      </g>
-    );
-}
 
 class Fridge extends Component {
   constructor(props) {
     super(props);
+<<<<<<< HEAD
     this.state = {
       clicked: false,
       macroView: false,
@@ -74,16 +21,21 @@ class Fridge extends Component {
       types: false,
       fridge: true
     }
+=======
+>>>>>>> parent of 33979f9... adtogglied cgraph
     this.filterItems = this.filterItems.bind(this);
   }
   
   //get correct fridge from database
   componentDidMount() {
+<<<<<<< HEAD
     // this.props.itemActions.getMacros('chicken');
+=======
+>>>>>>> parent of 33979f9... adtogglied cgraph
     this.props.fridgeActions.getFridge(localStorage.getItem('visitorId') || localStorage.getItem('name'));
     let state = this;
     setTimeout(() => {
-      this.props.itemActions.getItems(localStorage.getItem('fId'));
+      state.props.itemActions.getItems(localStorage.getItem('fId'));
     }, 500);
   };
 
@@ -96,6 +48,7 @@ class Fridge extends Component {
     })
   };
 
+<<<<<<< HEAD
   renderLabel(props) {
         return <text x={props.x} y={props.y}>{props.name}{' '}{props.calories + '/ LB'}</text>;
   }
@@ -110,6 +63,11 @@ class Fridge extends Component {
       {text: 'Fridge View', value: 'fridge'}
     ]
 
+=======
+
+
+  render() {
+>>>>>>> parent of 33979f9... adtogglied cgraph
     let { fridge, fridgeActions, itemActions } = this.props;
     const types = [
       {
@@ -143,9 +101,11 @@ class Fridge extends Component {
         display: 'Misc'
       }
     ]; 
+
     //form switches fridge views
     //render each item list by category
     //create popup to show list
+<<<<<<< HEAD
     if (this.state.macroView === true) {
       return (
         <div>
@@ -264,6 +224,11 @@ class Fridge extends Component {
 
     if (this.state.types === true) {
       return (
+=======
+    return (
+      <div>
+        <h2 className='ui dividing header'>{fridge.name && fridge.name.split('@')[0]}'s Fridge</h2>
+>>>>>>> parent of 33979f9... adtogglied cgraph
         <div>
           <Form>
             <Form.Group inline>
@@ -280,6 +245,7 @@ class Fridge extends Component {
                   document.getElementById('inputFid').value = '';
                 }}
               />
+<<<<<<< HEAD
               <Form.Select 
               placeholder='Browse Graphs' 
               options={graphOptions}
@@ -434,6 +400,8 @@ class Fridge extends Component {
                 }
               }}
               />  
+=======
+>>>>>>> parent of 33979f9... adtogglied cgraph
             </Form.Group>
           </Form>
           <ItemAddition />

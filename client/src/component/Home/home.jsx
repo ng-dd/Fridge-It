@@ -45,7 +45,6 @@ class Home extends Component {
       let username = localStorage.getItem('name');
 
       return (
-        <div>
         <Grid centered columns={2}>
           <Grid.Column width={4}>
             <Button content={'Create a Fridge'} color={'blue'}
@@ -77,7 +76,6 @@ class Home extends Component {
             </Form>
           </Grid.Column>
         </Grid>
-        </div>
       )
     }
   }

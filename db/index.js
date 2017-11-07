@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 require('dotenv').config();
 
-const sequelize = new Sequelize('postgres://nlnscmak:EBCvGRBezMg_5Kp-JJoVGg-4NCLM3ftR@pellefant.db.elephantsql.com:5432/nlnscmak', {dialect: 'postgres'});
+const sequelize = new Sequelize(process.env.DB_URL);
 
 const Fridge = sequelize.define('fridge', {
   users: {
@@ -33,6 +33,7 @@ const FridgeItems = sequelize.define('fridgeItem', {
     type: Sequelize.STRING,
     allowNull: false,
   },
+<<<<<<< HEAD
   protein: {
     type: Sequelize.INTEGER
   },
@@ -48,6 +49,8 @@ const FridgeItems = sequelize.define('fridgeItem', {
   totalWeight: {
     type: Sequelize.INTEGER
   }
+=======
+>>>>>>> parent of 33979f9... adtogglied cgraph
 });
 
 const MessageInfo = sequelize.define('messageInfo', {
