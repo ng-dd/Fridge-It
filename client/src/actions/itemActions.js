@@ -3,19 +3,6 @@ import axios from 'axios';
 //functions to get items and add items on front end 
 //uses reducers as part of promises to change state
 
-export function toggleClick() {
-  console.log('hllo')
-  return function(dispatch) {
-  axios.get('/api/items/')
-    .then(({ data }) => {
-      dispatch({type: 'BUTTON_CLICKED', payload: data});
-    })
-    .catch(err => { 
-      dispatch({type: 'BUTTON_NOT_CLICKED', payload: err});
-    });
-  };
-};
-
 export function getItems(fridgeId) {
   return function(dispatch) {
     axios.get('/api/items/' + fridgeId)
@@ -28,6 +15,37 @@ export function getItems(fridgeId) {
   };
 };
 
+export function getMacros(item) {
+  return function(dispatch) {
+    axios.post('/api/macros', {
+      item: item
+    })
+    .then((data) => {
+      console.log('this is the data from getMacros', data)
+      dispatch({type: 'ITEM_ID_INCOMING', payload: data.data.hints[0]});
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  }
+};
+
+export function getRealMacros(measureURI, foodURI) {
+  return function(dispatch) {
+    axios.post('/api/nutrients', {
+      measureURI: measureURI,
+      foodURI: foodURI
+    })
+    .then((data) => {
+      console.log('this is the real macro nutrients', data.data)
+      dispatch({type: 'NUTRIENTS_INCOMING', payload: data.data})
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+  }
+}
+
 export function addItem(item, id) {
   return function(dispatch) {
     axios.post('/api/items', {
@@ -36,6 +54,11 @@ export function addItem(item, id) {
       type: item.type,
       user: item.user,
       fridgeId: id,
+      protein: item.protein,
+      fat: item.fat,
+      carbs: item.carbs,
+      calories: item.calories,
+      totalWeight: item.totalWeight
     })
       .then(({ data }) => {
         dispatch({type: 'POST_ITEM_FULFILLED', payload: data});

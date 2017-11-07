@@ -1,5 +1,6 @@
 const Item = require('../../db/index').fridgeItems;
-
+const axios = require('axios');
+const unirest = require('unirest');
 //functions to add items, get items, and delete items from the database using promises
 
 module.exports = {
@@ -21,7 +22,12 @@ module.exports = {
       quantity: req.body.quantity,
       type: req.body.type,
       fridgeId: req.body.fridgeId,
-      user: req.body.user
+      user: req.body.user,
+      protein: req.body.protein,
+      carbs: req.body.carbs,
+      fat: req.body.fat,
+      calories: req.body.calories,
+      totalWeight: req.body.totalWeight
     })
     .then((data) => {
       res.send(data)
@@ -58,5 +64,46 @@ module.exports = {
     .catch(err => {
       res.status(500).send(err);
     })
+  },
+
+  getMacros: (req, res) => {
+    console.log(req.body)
+    axios.get(`https://api.edamam.com/api/food-database/parser?ingr=${req.body.item}&app_id=1fd96143&app_key=278fd5e87671519afa3b8cacb5a05268`)
+    .then((data) => {
+      console.log(req.body, 'fuuuuuuuuuuuck')
+      res.send(data.data).status(200)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  },
+
+  getRealMacros: (req, res) => {
+    axios.post('https://api.edamam.com/api/food-database/nutrients?app_id=1fd96143&app_key=278fd5e87671519afa3b8cacb5a05268', {
+      "yield": 1,
+      "ingredients": [
+        {
+          "quantity": 1,
+          "measureURI": req.body.measureURI,
+          "foodURI": req.body.foodURI
+        }
+      ]
+    })
+    .then((data) => {
+      res.send(data.data).send(200)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
   }
 };
+
+    // unirest.get("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/findByIngredients"
+    //               + "?ingredients=" + ingredients.join(',') + '&fillIngredients=false'
+    //               + "&limitLicense=false" + "&number=9" + "&ranking=1")
+    //         .header("X-Mashape-Key", process.env.API_FOOD_KEY)
+    //         .header("Accept", "application/json")
+    //         .end((result) => {
+    //           console.log('Headers: ', result.headers);
+    //           res.send(result.body);
+    //         });
